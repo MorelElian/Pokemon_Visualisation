@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>INF552 - 2022 - PC 03</title>
         <!-- https://vega.github.io/vega-lite/ -->
-        <script type="text/javascript" src="js/d3.v7.min.js"></script>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
         <!-- Your code -->
         <script src="js/main_js.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
@@ -93,7 +93,8 @@
             </div>
           </div>
         </div>
-      <div class = "jumbotron container bg-dark text-white" id = "pokemon_distrib">
+
+      <div class = "jumbotron container " id = "pokemon_distrib">
         <div class = "container">
           <h2 class = "display-4">Type Study</h2>
           <hr class="my-2">
@@ -119,6 +120,26 @@
             <p>Second, The more a type is a Primary Type, the less is will be a secondary type</p>
           </div>
         </div>
+      </div>
+      <div class = "jumbotron container bg-dark text-white" id = "mixing both">
+        <div class = "container">
+          <h2 class = "display-4">Generation and Types</h2>
+          <hr class="my-2">
+          <h3 class = "display-5">Pokémon Primary Types Prevalence Across generation</h3>
+          <div class = row>
+            <div class = "col col-lg-8" id = 'heatmap_gen_types'></div>
+            <div class = "col col-lg-4" style = "margin-top : 40px">
+              <p>A few types don't exist in some generations, like dark, steel and flying in generation 1 and dragon and flying in generation 2.
+              </p>
+              <p>Flying only exists as primary type in generations 5 and 6.
+              </p>
+              <p>
+              There is an unusually high amount of poison type pokémon in the first generation, steel type in the third, dark and psychic type in the fifth and fairy in the sixth.
+              <p>
+          </div>
+          </div>
+        </div>
+      </div>
     </body>
 
     </html>

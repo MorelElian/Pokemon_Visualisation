@@ -36,6 +36,7 @@ function loadData(){
             create_treemap('1');
             create_treemap('2');
             create_stacked_barplot_types();
+            create_heatmap_gen_types();
         });
             
 };
@@ -170,7 +171,7 @@ function create_treemap(type)
       .attr('y', function (d) { return d.y0; })
       .attr('width', function (d) { return d.x1 - d.x0; })
       .attr('height', function (d) { return d.y1 - d.y0; })
-      .style("stroke", "black")
+      .style("stroke", "none")
       .style("fill", d => ctx.palette[d.id]);
 
   // and to add the text labels
@@ -352,6 +353,94 @@ function StackedBarChart(data, {
   
     return Object.assign(svg.node(), {scales: {color}});
   }
+function create_heatmap_gen_types()
+{
+    data = ctx.data_loaded
+    var margin = {top: 30, right: 30, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#heatmap_gen_types")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+    data = d3.flatGroup(data, d => d.type1, d=>d.generation);
+    console.log(data)
+// Labels of row and columns
+    var myGroups = ["1","2","3","4","5","6","7"];
+    var myVars = ctx.types;
+
+// Build X scales and axis:
+    var x = d3.scaleBand()
+    .range([ 0, width ])
+    .domain(myGroups)
+    .padding(0.01);
+    svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+
+// Build X scales and axis:
+    var y = d3.scaleBand()
+    .range([ 0, height])
+    .domain(myVars)
+    .padding(0.01);
+    svg.append("g")
+    .call(d3.axisLeft(y));
+
+// Build color scale
+var myColor = d3.scaleLinear()
+  .range(["white", "#416e63"])
+  .domain([0,d3.max(data,d => d[2].length)])
+
+//Read the data
+
+
+  // create a tooltip
+  var tooltip = d3.select("#heatmap_gen_types")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+    .style("color",'black')
+
+  // Three function that change the tooltip when user hover / move / leave a cell
+  var mouseover = function(d) {
+    tooltip.style("opacity", 1)
+  }
+  var mousemove = function(d) {
+    tooltip
+      .html("The exact value of<br>this cell is: " + d.path[0].__data__[2].length )
+      .style("left", (d.clientX-205) + "px")
+      .style("top", (d.clientY -200) + "px")
+  }
+  var mouseleave = function(d) {
+    tooltip.style("opacity", 0)
+  }
+  console.log(data);
+  
+  // add the squares
+  svg.selectAll()
+    .data(data)
+    .enter()
+    .append("rect")
+      .attr("x", function(d) { return x(d[1]) })
+      .attr("y", function(d) { return y(d[0]) })
+      .attr("width", x.bandwidth() )
+      .attr("height", y.bandwidth() )
+      .style("fill", function(d) { return myColor(d[2].length)} )
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
+}
 function createViz(){
     console.log("Using D3 v"+d3.version);
    // var svgEl = d3.select("#generation_pokemon").append("svg");

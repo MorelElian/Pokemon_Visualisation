@@ -74,7 +74,7 @@
         </div >
         
         <div class = "jumbotron container bg-dark text-white" id = "pokemon_distrib">
-          <h2 class ="display-4">Global Study</h2>
+          <h2 class ="display-4">Generation Impact</h2>
           <hr class="my-2">
         
           <div class ="container">
@@ -90,11 +90,33 @@
                 <p style = "font-size : 20px; text-align : justify"> Odd generations have more new pokémon compared to even ones.
                   The average number of pokemons per generations is 100, and generation 5 is the most prolific generation</p>
               </div>
+            </div>
           </div>
+        </div>
+      <div class = "jumbotron container bg-dark text-white" id = "pokemon_distrib">
+        <div class = "container">
+          <h2 class = "display-4">Type Study</h2>
           <hr class="my-2">
           <h3 class = "display-5">Pokémon Primary Types Prevalence</h3>
           <div class = row>
-            <div class = col col-lg-12 id = 'treemap_primary_type'></div>
+            <div class = col col-lg-12 id = 'treemap_1_type'></div>
+          </div>
+          <hr class="my-2">
+          <h3 class = "display-5">What about Secondary Type ? </h3>
+          <hr class="my-2">
+          <div class = row>
+            <div class = col col-lg-12 id = 'treemap_2_type'></div>
+          </div>
+          <p class = "lead">Secondary types seem to be almost the opposite of primary types: the treemap allows us to visualize this, let's see if we can better see the repartition with a stacked barplot</p>
+        </div>
+        <hr class="my-1">
+        <h3 class = "display-5">Pokemon by Primary and second types</h3>
+        <div class = row>
+          <div class = "col col-lg-8" id = 'stacked_barplot_types'></div>
+          <div class = "col col-lg-4">
+            <p>We have created a stacked barchart, sorted by Primary Type. Thanks to this graph, we can detect two insights : </p>
+            <p>First, the Primary Type is directly correlated to the global number of Pokemon</p>
+            <p>Second, The more a type is a Primary Type, the less is will be a secondary type</p>
           </div>
         </div>
     </body>

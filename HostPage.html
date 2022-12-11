@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>INF552 - 2022 - PC 03</title>
+        <!-- https://vega.github.io/vega-lite/ -->
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.5.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+        <script type="text/javascript" src="js/d3.v7.min.js"></script>
+        <!-- Your code -->
+        <script src="js/main_js.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        
+    </head>
+
+    <body onload="createViz();">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">Who's that Pokemon ?</a>
+              </div>
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="HostPage.html">Global Statistics</a></li>
+                <li><a href="Pokedex.html">Pokedex</a></li>
+                <li><a href="Deeper_Analysis.html">Best 6 ever</a></li>
+              </ul>
+            </div>
+        </nav>
+
+        <div class="card card-image">
+          <div class="text-white text-center rgba-stylish-strong my-5 ">
+            <div class="my-5  py-5">
+        
+                <!-- Content -->
+              <h2 class=" h2 my-5 py-5">Jumbotron with image overlay</h2>
+                
+            </div>
+          </div>
+        </div>
+
+        <div class = "jumbotron container" id = "generation_pokemon"><h2 class ="display-2">A first look on Pokemons !  </h2>
+          <hr class="my-4">
+            <div class = "container">
+              <div class = "row">
+                <div class="col col-lg-6">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Caracteristics</th>
+                        <th scope="col">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Number of Pokemons</td>
+                        <td>801</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Number of generations</td>
+                        <td>7</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Lightest Pokemon</td>
+                        <td>?</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">4</th>
+                        <td>Heaviest Pokemon</td>
+                        <td>?</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="col col-lg-6" style = "padding-top : 10px;">
+                  <p  style = "font-size : 20px">
+                    In this first table, we gather the main data on pokemons: 
+                    there are 801 pokemons divided into 7 different generations: but finally, 
+                    we get quite little information with these tabular data alone: let's try to visualize 
+                    this dataset to pierce the secrets it hides!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+                
+    </body>
+
+    </html>

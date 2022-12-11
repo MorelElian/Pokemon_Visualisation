@@ -4,42 +4,27 @@
         <meta charset="utf-8">
         <title>INF552 - 2022 - PC 03</title>
         <!-- https://vega.github.io/vega-lite/ -->
-        <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.5.0"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
         <script type="text/javascript" src="js/d3.v7.min.js"></script>
         <!-- Your code -->
         <script src="js/main_js.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main_page.css">
     </head>
 
     <body onload="createViz();">
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">Who's that Pokemon ?</a>
-              </div>
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="HostPage.html">Global Statistics</a></li>
-                <li><a href="Pokedex.html">Pokedex</a></li>
-                <li><a href="Deeper_Analysis.html">Best 6 ever</a></li>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            
+            <a class="navbar-brand" href="#">Who's that Pokemon ?</a>
+            <div class=" collapse navbar-collapse">
+              <ul class="navbar-nav mr-auto ">
+                <li class="nav-item active"><a class ="nav-link" href="HostPage.html">Global Statistics</a></li>
+                <li class = "nav-item"><a class = "nav-link" href="Pokedex.html">Pokedex</a></li>
+                <li class = "nav-item"><a class = "nav-link" href="Deeper_Analysis.html">Best 6 ever</a></li>
               </ul>
             </div>
         </nav>
 
-        <div class="card card-image">
-          <div class="text-white text-center rgba-stylish-strong my-5 ">
-            <div class="my-5  py-5">
-        
-                <!-- Content -->
-              <h2 class=" h2 my-5 py-5">Jumbotron with image overlay</h2>
-                
-            </div>
-          </div>
-        </div>
-
-        <div class = "jumbotron container" id = "generation_pokemon"><h2 class ="display-2">A first look on Pokemons !  </h2>
+        <div class = "jumbotron container" id = "tabulair_caract" ><h2 class ="display-4">A first look on Pokemons ! </h2>
           <hr class="my-4">
             <div class = "container">
               <div class = "row">
@@ -76,8 +61,8 @@
                     </tbody>
                   </table>
                 </div>
-                
-                <div class="col col-lg-6" style = "padding-top : 10px;">
+
+                <div class="col col-lg-6" id = "global_analysis" style = "padding-top : 10px;">
                   <p  style = "font-size : 20px">
                     In this first table, we gather the main data on pokemons: 
                     there are 801 pokemons divided into 7 different generations: but finally, 
@@ -86,8 +71,32 @@
               </div>
             </div>
           </div>
+        </div >
+        
+        <div class = "jumbotron container bg-dark text-white" id = "pokemon_distrib">
+          <h2 class ="display-4">Global Study</h2>
+          <hr class="my-2">
+        
+          <div class ="container">
+            <div class ="row">
+              <h3 class = "display-5">Number of Pokemons per generations</h3>
+              <hr class="my-2">
+            </div>
+            <div class = "row">
+              <div class = "col col-lg-9" id = "container_barplot_generation">
+
+              </div>
+              <div class = "col col-lg-3">
+                <p style = "font-size : 20px; text-align : justify"> Odd generations have more new pokémon compared to even ones.
+                  The average number of pokemons per generations is 100, and generation 5 is the most prolific generation</p>
+              </div>
+          </div>
+          <hr class="my-2">
+          <h3 class = "display-5">Pokémon Primary Types Prevalence</h3>
+          <div class = row>
+            <div class = col col-lg-12 id = 'treemap_primary_type'></div>
+          </div>
         </div>
-                
     </body>
 
     </html>

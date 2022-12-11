@@ -11,23 +11,22 @@
         <!-- Your code -->
         <!-- <script src="js/main_js.js"></script> -->
         <script src = "js/pokedex_js.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
         
     </head>
 
     <body onload="createViz();">
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">Who's that Pokemon ?</a>
-              </div>
-              <ul class="nav navbar-nav">
-                <li><a href="HostPage.html">Global Statistics</a></li>
-                <li class="active"><a href="Pokedex.html">Pokedex</a></li>
-                <li><a href="Deeper_Analysis.html">Best 6 ever</a></li>
-              </ul>
-            </div>
-          </nav>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            
+        <a class="navbar-brand" href="#">Who's that Pokemon ?</a>
+        <div class=" collapse navbar-collapse">
+          <ul class="navbar-nav mr-auto ">
+            <li class="nav-item"><a class ="nav-link" href="HostPage.html">Global Statistics</a></li>
+            <li class = "nav-item active"><a class = "nav-link" href="Pokedex.html">Pokedex</a></li>
+            <li class = "nav-item"><a class = "nav-link" href="Deeper_Analysis.html">Best 6 ever</a></li>
+          </ul>
+        </div>
+      </nav>
           <div id ="main">
           <form>
             <input type="text" name="sampleField" value="Bulbasaur" id="sampleTf"

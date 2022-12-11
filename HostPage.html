@@ -87,9 +87,17 @@
 
               </div>
               <div class = "col col-lg-3">
-                <p style = "font-size : 20px; text-align : justify"> Odd generations have more new pokémon compared to even ones.
+                <p id = "text-generation" style = "font-size : 20px; text-align : justify; opacity : 0"> Odd generations have more new pokémon compared to even ones.
                   The average number of pokemons per generations is 100, and generation 5 is the most prolific generation</p>
               </div>
+            </div>
+            <hr class = "my-2" id = "observer_catch_1">
+            <h3 class = "display-5">Which generation have the easiest pokemon to catch ?</h3>
+            <div class = "row">
+              <div class = "col col-lg-5" style = "text-align : justify; padding-top : 50px"><p>Generation 3 has the easiest pokémon to catch, while generation 4 has the hardest.</p>
+              <p>Distributions remains very close throughout the generations</p>
+              <p>We have excluded legendary pokemons for this boxplot since they can be considered as outliers, we will study them after</p></div>
+              <div class = "col col-lg-7" id = "boxplot_capture_rate_gen"></div>
             </div>
           </div>
         </div>
@@ -140,6 +148,16 @@
           </div>
         </div>
       </div>
+    <div class = "jumbotron container " id = "mixing both">
+      <div class = "container">
+        <h2 class = "display-4">Overview of base stats</h2>
+        <hr class="my-2">
+        <h3 class = "display-5">Pokémon Primary Types Prevalence Across generation</h3>
+        <div class = row>
+          <div class = "col col-lg-8" id = 'boxplot_caracts'> </div>
+        </div>
+      </div>
+    </div>
     </body>
 
     </html>

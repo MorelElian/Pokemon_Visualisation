@@ -581,7 +581,7 @@ var svg = d3.select("#boxplot_capture_rate_gen")
         .attr("height", function(d){return(y(d.q1)-y(d.q3))})
         .attr("width", 0)
         .attr("stroke", "black")
-        .style("fill", "# 69b3a2")
+        .style("fill", "#69b3a2")
 
   // Show the median
   medians = svg

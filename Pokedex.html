@@ -10,6 +10,7 @@
         <script type="text/javascript" src="js/d3.v7.min.js"></script>
         <!-- Your code -->
         <!-- <script src="js/main_js.js"></script> -->
+        <script src = "js/utilities.js"></script>
         <script src = "js/pokedex_js.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
         
@@ -30,14 +31,27 @@
 
 
       <div id ="main">
-        <div class="container m-4">
-          <div class="row justify-content-center">
-            <form class="form-inline">
-              <input type="text" class="form-control mr-1 ml-auto" name="sampleField" value="Bulbasaur" id="sampleTf" placeholder="Nom du pokemon"
+        <div class="container m-3">
+          <div class="row" style = "width : 1350px">
+            <div class = "col col-lg-4">
+              <form class="form-inline">
+                <input type="text" class="form-control mr-1 ml-auto" name="sampleField" value="Bulbasaur" id="sampleTf" placeholder="Nom du pokemon"
         onkeydown="handleKeyEvent(event);"/>
-              <input type="button" class="btn btn-primary mr-1" value="Search" onclick="updatePokemon();" id="sampleBt"/>
-              <input type="button" class="btn btn-info pull-right" value = "See Barplot" onclick = "transition_radar_barplot();" id = "radar_barplot">
+                <input type="button" class="btn btn-primary mr-1" value="Search" onclick="updatePokemon();" id="sampleBt"/>
+               
             </form>
+            </div>
+            <div class = "col col-lg-4 justify-content-center">
+              <input type="button" class="btn btn-info" value = "See Barplot"  style = "margin-left : 200px" onclick = "transition_radar_barplot();" id = "radar_barplot">
+            </div>
+            <div class = "col col-lg-4">
+              <form class="form-inline" style = "padding-left : 50px">
+                <input type="text" class="form-control mr-1 ml-auto" name="sampleField" value="Bulbasaur" id="pokemon_2" placeholder="Nom du pokemon"
+        onkeydown="handleKeyEvent(event);"/>
+                <input type="button" class="btn btn-primary mr-1" value="Search" onclick = "change_pokemon();" id="sampleBt-2"/>
+               
+              </form>
+            </div>
           </div> 
         </div>
         <div class = "container">
@@ -56,7 +70,7 @@
               </div>
               <div class = "col col-lg-4" style = "padding-left : 1px;">
                 <div class = "jumbotron container" style = "padding-left : 1px;" id = "contain-pokedex-2">
-                  <h2 class = "display-5" style = "margin-top : -50px; text-align: center ;">Pokemon n°2</h2>
+                  <h2 class = "display-5" style = "margin-top : -50px; text-align: center ;" id = "another_pokemon" >Another Pokemon</h2>
                   <hr>
                 </div> 
               </div>

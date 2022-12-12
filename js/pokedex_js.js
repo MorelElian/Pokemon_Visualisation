@@ -6,6 +6,7 @@ const ctx = {
     data_loaded : [],
     img_width : 150,
     img_height : 150,
+    svg_pokemon_1 : [],
     svg_compare : [],
     svg_pokemon_2 : [],
     data_against : [],
@@ -126,12 +127,24 @@ function loadData(){
 function updatePokemon()
 {
     ctx.update = 1;
-    d3.select('#barplot_against').remove();
-    d3.select('#hexagon ').remove();
-
-    d3.select('#main_caract').remove();
-    d3.select('#gif_pokemon').remove();
-    loadData();
+    //d3.select('#barplot_against').remove();
+    for(let i = 0; i < ctx.data_loaded.length; i++)
+            {
+                console.log(ctx.data_loaded[i].name);
+                if(ctx.data_loaded[i].name == d3.select('#sampleTf').property("value"))
+                {
+                    ctx.i_pokemon = i;
+                    break;
+                }
+            }
+    d3.select('#path_radar1').remove();
+    d3.select('#main_caract1').remove();
+    d3.select('#gif_pokemon1').remove();
+    
+    load_img(ctx.data_loaded,ctx.svg_pokemon_1,"1");
+    add_radial_chart(ctx.svg_compare,"1");
+    load_main_cacact(ctx.svg_pokemon_1,"1")
+    update_barplot_against("1");        
     
 }
 function load_img(data,svg, poke = "1")
@@ -144,7 +157,7 @@ function load_img(data,svg, poke = "1")
     {
         i_poke = ctx.i_pokemon;
     }
-    svg.append('g').append('image').attr('id','gif_pokemon').attr('href','/img/gifs/'+ctx.data_loaded[i_poke].name+'.gif').attr('width',ctx.img_width).attr('height',ctx.img_height)
+    svg.append('g').append('image').attr('id','gif_pokemon'+poke).attr('href','/img/gifs/'+ctx.data_loaded[i_poke].name+'.gif').attr('width',ctx.img_width).attr('height',ctx.img_height)
     .attr('preserveAspectRatio','none');
     //img.append('rect').attr('width',700).attr('height',700)
     //.style('background-image', 'url(/img/pokemon_banner_v2.jpg').attr('fill','None');
@@ -162,7 +175,7 @@ function load_main_cacact(svg,poke = "1")
     }
     data = ctx.data_loaded[i_poke]
 
-    let main_caract = svg.append('g').attr('id','main_caract')
+    let main_caract = svg.append('g').attr('id','main_caract'+poke)
     .attr('transform','translate(' + ctx.img_width + ',20)');
     for(let i = 0; i < ctx.main_caracts.length; i ++)
     {
@@ -279,12 +292,12 @@ function create_barplot_against(svg)
     .attr('id','y_axis_barplot_against');
 
   //Bars
-  let bp_test = barplot.selectAll("myRect")
+  let bp_test = barplot.selectAll("myRect1")
     .data(data_against);
     bp_test.exit().remove()
     bp_test
     .enter()
-    .append("rect")
+    .append("rect").attr('class','rect_against1')
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.title); })
     .attr("height", y.bandwidth() )
@@ -295,58 +308,87 @@ function create_barplot_against(svg)
 }
 function update_barplot_against(poke)
 { 
-
+    if(poke == "1")
+    {
+        i_poke = ctx.i_pokemon;
+    }
+    else{
+        i_poke = ctx.i_pokemon_2;
+    }
+    data_against_1 = create_against(ctx.data_loaded[ctx.i_pokemon])
+    data_against_2 = create_against(ctx.data_loaded[ctx.i_pokemon_2])
+    data_against = create_against(ctx.data_loaded[i_poke]);
     if(ctx.group_barplot == 0)
     {
-        data_against_1 = create_against(ctx.data_loaded[ctx.i_pokemon])
-        data_against_2 = create_against(ctx.data_loaded[ctx.i_pokemon_2])
-        d3.select('#y_axis_barplot_against')
-        .transition()
-        .duration(1000)
-        .attr('transform','scale(1 1.5)');
+        if(poke != "1")
+        {   
+            d3.select('#y_axis_barplot_against')
+            .transition()
+            .duration(1000)
+            .attr('transform','scale(1 1.5)');
 
-        d3.select('#x_axis_barplot_against')
-        .transition()
-        .duration(1000)
-        .attr("transform", "translate(0," + (1.5 * height_barplot) + ")")
-        var x = d3.scaleLinear()
-        .domain([0, 4.0])
-        .range([ 0, ctx.width_against]);
-        var y = d3.scaleBand()
-            .range([ 0, 1.5 * height_barplot])
-            .domain(data_against_1.map(function(d) { return d.title; }))
-            .padding(.1);
-        
-        d3.select('#barplot_against').selectAll('rect')
-        .transition()
-        .duration(1000)
-        .attr('y',function(d) { return y(d.title) +  y.bandwidth()/6; })
-        .attr('height', y.bandwidth()/3);
+            d3.select('#x_axis_barplot_against')
+            .transition()
+            .duration(1000)
+            .attr("transform", "translate(0," + (1.5 * height_barplot) + ")")
+            var x = d3.scaleLinear()
+            .domain([0, 4.0])
+            .range([ 0, ctx.width_against]);
+            var y = d3.scaleBand()
+                .range([ 0, 1.5 * height_barplot])
+                .domain(data_against_1.map(function(d) { return d.title; }))
+                .padding(.1);
+            
+            d3.select('#barplot_against').selectAll('rect')
+            .transition()
+            .duration(1000)
+            .attr('y',function(d) { return y(d.title) +  y.bandwidth()/6; })
+            .attr('height', y.bandwidth()/3);
 
-    
-        
+            d3.select('#barplot_against').selectAll("myRect2")
+            .data(data_against_2)
+            .enter()
+            .append("rect")
+            .attr("class","rect_against2")
+            .attr("x", x(0) )
+            .attr("y", function(d) { return y(d.title) + y.bandwidth()/2; })
+            .attr("height", y.bandwidth()/3 )
+            .style("fill", ctx.palette[ctx.data_loaded[ctx.i_pokemon_2].type1])
+            .transition()
+            .delay(1000)
+            .duration(1000)
+            .attr("width", d => x(d.value));
+        }
+        else{
+            var x = d3.scaleLinear()
+                .domain([0, 4.0])
+                .range([ 0, ctx.width_against]);
+            var y = d3.scaleBand()
+                .range([ 0, 1 * height_barplot])
+                .domain(data_against_1.map(function(d) { return d.title; }))
+                .padding(.1);
 
-        d3.select('#barplot_against').selectAll("myRect2")
-        .data(data_against_2)
-        .enter()
-        .append("rect")
-        .attr("class","rect_against_2")
-        .attr("x", x(0) )
-        .attr("y", function(d) { return y(d.title) + y.bandwidth()/2; })
-        .attr("height", y.bandwidth()/3 )
-        .style("fill", ctx.palette[ctx.data_loaded[i_poke].type1])
-        .transition()
-        .delay(1000)
-        .duration(1000)
-        .attr("width", d => x(d.value));
-        
-
+            d3.select('#barplot_against').selectAll(".rect_against"+poke)
+            .transition()
+            .duration(1000)
+            .attr("width",0).on("end", function (){d3.select('#barplot_against').selectAll(".rect_against"+poke).remove();
+            d3.select('#barplot_against').selectAll("myRect"+poke)
+            .data(data_against)
+            .enter()
+            .append("rect")
+            .attr("class","rect_against"+poke)
+            .attr("x", x(0) )
+            .attr("y", function(d) { return y(d.title);})
+            .attr("height", y.bandwidth())
+            .style("fill", ctx.palette[ctx.data_loaded[i_poke].type1])
+            .transition()
+            .duration(1000)
+            .attr("width", d => x(d.value));
+        });
+        }
     }
     else
     {
-        data_against_1 = create_against(ctx.data_loaded[ctx.i_pokemon]);
-        data_against_2 = create_against(ctx.data_loaded[ctx.i_pokemon_2]);
-
         var x = d3.scaleLinear()
         .domain([0, 4.0])
         .range([ 0, ctx.width_against]);
@@ -355,19 +397,25 @@ function update_barplot_against(poke)
             .domain(data_against_1.map(function(d) { return d.title; }))
             .padding(.1);
 
-        d3.select('#barplot_against').selectAll(".rect_against_2")
+        d3.select('#barplot_against').selectAll(".rect_against"+poke)
         .transition()
         .duration(1000)
-        .attr("width",0).on("end", function (){d3.select('#barplot_against').selectAll(".rect_against_2").remove();
+        .attr("width",0).on("end", function (){d3.select('#barplot_against').selectAll(".rect_against"+poke).remove();
 
         
-        d3.select('#barplot_against').selectAll("myRect2")
-        .data(data_against_2)
+        d3.select('#barplot_against').selectAll("myRect"+poke)
+        .data(data_against)
         .enter()
         .append("rect")
-        .attr("class","rect_against_2")
+        .attr("class","rect_against"+poke)
         .attr("x", x(0) )
-        .attr("y", function(d) { return y(d.title) + y.bandwidth()/2; })
+        .attr("y", function(d) { 
+            if(poke == "1")
+            {
+                return y(d.title) + y.bandwidth()/6;
+            }
+            else{
+                return y(d.title) + y.bandwidth()/2;} })
         .attr("height", y.bandwidth()/3 )
         .style("fill", ctx.palette[ctx.data_loaded[i_poke].type1])
         .transition()
@@ -437,7 +485,7 @@ function create_hexagon_chart(data,svg)
     .selectAll('path')
     .data([pokemonBaseStats[ctx.i_pokemon]])
     .enter()
-    .append('path')
+    .append('path') 
     .attr('transform', `translate(${r}, ${r})`)
     .attr('stroke', ctx.palette[ctx.data_loaded[ctx.i_pokemon].type1])
     .attr('stroke-width', 5)
@@ -481,23 +529,23 @@ function add_radial_chart(svg,n_poke)
 {
     if(n_poke == "1")
     {
-        var i_poke = ctx.i_pokemon;
+        i_poke = ctx.i_pokemon;
     }
     else
     {
         i_poke = ctx.i_pokemon_2;
     }
+    console.log(i_poke);
+    console.log(ctx.data_loaded[i_poke]);
     const r = 100;
     const radialLine = d3.lineRadial();
     const yScale = d3.scaleLinear()
     .range([0, r])
     .domain([0, 255]);
-    pokemonBaseStats = ctx.data_loaded;
-    const hexagon = d3.select('g#hexagon');
-    hexagon.transition().duration(500).style('opacity','1');
+    hexagon = d3.select('g#hexagon');
     hexagon.append('g').attr('id','path_radar'+n_poke)
     .selectAll('path')
-    .data([pokemonBaseStats[i_poke]])
+    .data([ctx.data_loaded[i_poke]])
     .enter()
     .append('path')
     .attr('transform', `translate(${r}, ${r})`)
@@ -651,7 +699,7 @@ function change_pokemon()
                 }
             }
     ctx.svg_pokemon_2.select("image").remove();
-    ctx.svg_pokemon_2.select('#main_caract').remove();
+    ctx.svg_pokemon_2.select('#main_caract2').remove();
     ctx.svg_compare.select('#path_radar2').remove();
     load_img(data,ctx.svg_pokemon_2,"2");
     load_main_cacact(ctx.svg_pokemon_2,"2");
@@ -663,10 +711,10 @@ function change_pokemon()
 }
 function createViz(){
     console.log("Using D3 v"+d3.version);
-    var svgEl = d3.select("#contain-pokedex-1").append("svg");
-    svgEl.attr("width", ctx.w);
-    svgEl.attr("height", ctx.h);
+    ctx.svg_pokemon_1 = d3.select("#contain-pokedex-1").append("svg");
+    ctx.svg_pokemon_1.attr("width", ctx.w);
+    ctx.svg_pokemon_1.attr("height", ctx.h);
     ctx.svg_compare = d3.select('#contain-compar-1').append("svg").attr("width",ctx.w_compare).attr("height",ctx.h_compare);
     ctx.svg_pokemon_2 = d3.select('#contain-pokedex-2').append("svg").attr("width",ctx.w).attr("height",ctx.h);
-    loadData(svgEl);
+    loadData(ctx.svg_pokemon_1);
 };

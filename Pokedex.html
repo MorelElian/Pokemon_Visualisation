@@ -27,14 +27,41 @@
           </ul>
         </div>
       </nav>
-          <div id ="main">
-          <form>
-            <input type="text" name="sampleField" value="Bulbasaur" id="sampleTf"
-           onkeydown="handleKeyEvent(event);"/>
-           <input type="button" value="Trouver le Pokemon" onclick="updatePokemon();" id="sampleBt"/>
-           <input type = "button" value = "See Barplot" onclick = "transition_radar_barplot();" id = "radar_barplot">
-           </form>
-           </div>
-    </body>
+
+
+      <div id ="main">
+        <div class="container m-4">
+          <div class="row justify-content-center">
+            <form class="form-inline">
+              <input type="text" class="form-control mr-1 ml-auto" name="sampleField" value="Bulbasaur" id="sampleTf" placeholder="Nom du pokemon"
+        onkeydown="handleKeyEvent(event);"/>
+              <input type="button" class="btn btn-primary mr-1" value="Search" onclick="updatePokemon();" id="sampleBt"/>
+              <input type="button" class="btn btn-info pull-right" value = "See Barplot" onclick = "transition_radar_barplot();" id = "radar_barplot">
+            </form>
+          </div> 
+        </div>
+        <div class = "container">
+          <div class ="row" style = "margin-left : -150px; margin-right: -150px;">
+            <div class = "col col-lg-4" style = "padding-left : 1px;">
+              <div class = "jumbotron container" style = "padding-left : 1px" id = "contain-pokedex-1">
+                 <h2 class = "display-5" style = "margin-top : -50px; text-align: center ;">Pokemon n°1</h2>
+                 <hr>
+              </div>
+            </div>
+              <div class = "col col-lg-4" style = "padding-left : 1px;">
+                <div class = "jumbotron container" style = "padding-left : 1px;" id = "contain-compar-1">
+                  <h2 class = "display-5" style = "margin-top : -50px; text-align: center ;">Stats</h2>
+                  <hr>
+                </div> 
+              </div>
+              <div class = "col col-lg-4" style = "padding-left : 1px;">
+                <div class = "jumbotron container" style = "padding-left : 1px;" id = "contain-pokedex-2">
+                  <h2 class = "display-5" style = "margin-top : -50px; text-align: center ;">Pokemon n°2</h2>
+                  <hr>
+                </div> 
+              </div>
+          </div>
+        </div>
+      </div>
 
     </html>

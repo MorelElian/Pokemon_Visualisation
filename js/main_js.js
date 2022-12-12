@@ -24,7 +24,10 @@ const ctx = {
     height_barplot_generation : 400,
     width_treemap : 1000,
     heigth_treemap : 500,
-    width_stacked_barplot_types : 700
+    width_stacked_barplot_types : 700,
+    width_boxplot_gen_capt : 600,
+    height_boxplot_gen_capt : 400,
+    box_width_gen_capt : 20
 };
 function loadData(){
     var pokemons = d3.csv("/data/pokemon.csv").then(
@@ -37,6 +40,7 @@ function loadData(){
             create_treemap('2');
             create_stacked_barplot_types();
             create_heatmap_gen_types();
+            create_boxplot_capturerate();
         });
             
 };
@@ -74,8 +78,8 @@ function create_barchart_pokemon_distrib()
     .attr("transform", "translate(0," + height_barplot + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end");
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
 
   // Y axis
   var y = d3.scaleBand()
@@ -86,33 +90,56 @@ function create_barchart_pokemon_distrib()
   barplot.append("g")
     .call(d3.axisLeft(y));
 
-    barplot.transition().duration(500).delay(500).style('opacity','1').on("end",function(){
-  //Bars
-    barplot.selectAll("myRect")
+    barplot.transition().duration(500).delay(500).style('opacity','1')
+    var bars = barplot.selectAll("myRect")
     .data(data_to_use)
     .enter()
     .append("rect")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.title); })
     .attr("height", y.bandwidth() )
-    .transition()
-    .duration(1000)
-    .attr("width", function(d) { return x(d.value); })
-    .attr("fill", "#69b3a2")});
+    .attr("width","0")
+    .attr("opacity",1);
 
-    barplot.selectAll("myRect")
+    var text_bar = barplot.selectAll("myRect")
     .data(data_to_use)
     .enter()
     .append("text")
     .text(d => d.value)
     .attr("x", d => x(d.value) + 10)
     .attr("y", function(d) {return y(d.title) +27})
-    .style("opacity", 0)
-    .transition()
-    .delay(1500)
-    .duration(300)
-    .style("opacity","1")
-    .style("stroke","white");
+    .style("opacity", 0);
+    
+
+    
+    const observer = new IntersectionObserver(entries => {
+    //     // Loop over the entries
+         entries.forEach(entry => {
+           // If the element is visible
+           if (entry.isIntersecting) {
+            
+            bars.attr("opacity",1)
+            .transition()
+            .duration(700)
+            .attr("width", function(d) { return x(d.value); })
+            .attr("fill", "#69b3a2");
+            text_bar.transition()
+            .delay(700)
+            .duration(300)
+            .style("opacity","1")
+            .style("stroke","white");
+            d3.select("#text-generation").transition()
+            .delay(1000)
+            .duration(300)
+            .style("opacity",1);
+            
+
+            
+           }
+         });
+       });
+      
+    observer.observe(document.querySelector('#observer_catch_1'))
 }
 function create_treemap(type)
 {
@@ -341,8 +368,9 @@ function StackedBarChart(data, {
       .join("rect")
         .attr("x", ([x1, x2]) => Math.min(xScale(x1), xScale(x2)))
         .attr("y", ({i}) => yScale(Y[i]))
-        .attr("width", ([x1, x2]) => Math.abs(xScale(x1) - xScale(x2)))
-        .attr("height", yScale.bandwidth());
+        .attr("height", yScale.bandwidth())
+        .attr("width", ([x1, x2]) => Math.abs(xScale(x1) - xScale(x2)));
+        
   
     if (title) bar.append("title")
         .text(({i}) => title(i));
@@ -350,7 +378,7 @@ function StackedBarChart(data, {
     svg.append("g")
         .attr("transform", `translate(${xScale(0)},0)`)
         .call(yAxis);
-  
+    
     return Object.assign(svg.node(), {scales: {color}});
   }
 function create_heatmap_gen_types()
@@ -441,6 +469,174 @@ var myColor = d3.scaleLinear()
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave)
 }
+function create_boxplot_capturerate()
+{
+// set the dimensions and margins of the graph
+// set the dimensions and margins of the graph
+    data = ctx.data_loaded.filter( d => d.is_legendary != "1");
+var margin = {top: 10, right: 30, bottom: 30, left: 40},
+    width = ctx.width_boxplot_gen_capt - margin.left - margin.right,
+    height = ctx.height_boxplot_gen_capt - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#boxplot_capture_rate_gen")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Read the data and compute summary statistics for each specie
+  // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
+  var sumstat = d3 // nest function allows to group the calculation per level of a factor
+        .rollup(data,function(d) {
+        q1 = d3.quantile(d.map(function(g) { return g.capture_rate;}).sort(d3.ascending),.25)
+        median = d3.quantile(d.map(function(g) { return g.capture_rate;}).sort(d3.ascending),.5)
+        q3 = d3.quantile(d.map(function(g) { return g.capture_rate;}).sort(d3.ascending),.75)
+        interQuantileRange = q3 - q1
+        min = d3.min(d.map(function(g) { return parseInt(g.capture_rate);}))
+        max =  d3.max(d.map(function(g) { return parseInt(g.capture_rate);}))
+        return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+        }, d => d.generation);
+
+    console.log(sumstat);
+    console.log(sumstat.get("1"));
+    sumstat = [
+        sumstat.get("1"),
+        sumstat.get("2"),
+        sumstat.get("3"),
+        sumstat.get("4"),
+        sumstat.get("5"),
+        sumstat.get("6"),
+        sumstat.get("7")
+    ];
+    sumstat[0].key = "1";
+    sumstat[1].key = "2";
+    sumstat[2].key = "3";
+    sumstat[3].key = "4";
+    sumstat[4].key = "5";
+    sumstat[5].key = "6";
+    sumstat[6].key = "7";
+    console.log(sumstat);
+  // Show the X scale
+  var x = d3.scaleBand()
+    .range([ 0, width ])
+    .domain(["1","2","3","4","5","6","7"])
+    .paddingInner(1)
+    .paddingOuter(.5)
+  x_axis = svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .style('opacity',0)
+    //legend 
+  text_x_axis =   svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("fill","white")
+    .attr("x", width+20)
+    .attr("y", height+ 30)
+    .text("Generations")
+    .style("opacity",0)
+    ;
+
+  // Show the Y scale
+  var y = d3.scaleLinear()
+    .domain([0,d3.max(data,d => parseInt(d.capture_rate)) + 20])
+    .range([height,0])
+  y_axis = svg.append("g").call(d3.axisLeft(y)).style('opacity',0);
+  text_y_axis =svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("y", 6)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Capture Rate")
+    .attr("fill","white")
+    .style("opacity","0");
+
+  // Show the main vertical line
+  vert_lines = svg
+    .selectAll("vertLines")
+    .data(sumstat)
+    .enter()
+    .append("line")
+      .attr("x1", function(d){return(x(d.key))})
+      .attr("x2", function(d){return(x(d.key))})
+      .attr("y1", function(d){return(y(d.max))})
+      .attr("y2", function(d){return(y(d.min))})
+      .attr("stroke", "black")
+      .style("width", 40)
+      .style("opacity","0");
+
+  // rectangle for the main box
+  var boxWidth = ctx.box_width_gen_capt
+  boxes = svg
+    .selectAll("boxes")
+    .data(sumstat)
+    .enter()
+    .append("rect")
+        .attr("x", function(d){return(x(d.key)-boxWidth/2)})
+        .attr("y", function(d){return(y(d.q3))})
+        .attr("height", function(d){return(y(d.q1)-y(d.q3))})
+        .attr("width", 0)
+        .attr("stroke", "black")
+        .style("fill", "# 69b3a2")
+
+  // Show the median
+  medians = svg
+    .selectAll("medianLines")
+    .data(sumstat)
+    .enter()
+    .append("line")
+      .attr("x1", function(d){return(x(d.key)-boxWidth/2) })
+      .attr("x2", function(d){return(x(d.key)+boxWidth/2) })
+      .attr("y1", function(d){return(y(d.median))})
+      .attr("y2", function(d){return(y(d.median))})
+      .attr("stroke", "black")
+      .style("width", 80)
+      .attr("opacity",0)
+
+      const observer = new IntersectionObserver(entries => {
+        //     // Loop over the entries
+             entries.forEach(entry => {
+               // If the element is visible
+               if (entry.isIntersecting) {
+                    x_axis.transition()
+                    .duration(500)
+                    .style('opacity',1);
+                    text_x_axis.transition()
+                    .duration(500)
+                    .style('opacity',1);
+                    y_axis.transition()
+                    .duration(500)
+                    .style('opacity',1);
+                    text_y_axis.transition()
+                    .duration(500)
+                    .style('opacity',1);
+                    boxes.transition()
+                    .delay(500)
+                    .duration(500)
+                    .attr('width',boxWidth);
+                    medians.transition()
+                    .delay(1000)
+                    .duration(300)
+                    .attr('opacity',1);
+                    vert_lines.transition()
+                    .delay(1000)
+                    .duration(300)
+                    .style('opacity',1);
+                    d3.selectAll(".text-boxplot-gen-rate")
+                    .transition()
+                    .delay(1200)
+                    .style('opacity',1);
+               }
+             });
+           });
+          
+        observer.observe(document.querySelector('#observer_catch_2'))
+}
+// Add individual points with jitter
 function createViz(){
     console.log("Using D3 v"+d3.version);
    // var svgEl = d3.select("#generation_pokemon").append("svg");
@@ -449,5 +645,7 @@ function createViz(){
     d3.select('#tabulair_caract').style('margin-top',"150px").transition().duration(1000).style('margin-top',"10px");
     d3.select('#global_analysis').style('opacity',0).transition().delay(1000).duration(500).style('opacity',1);
     d3.select('#pokemon_distrib').style('margin-top',"300px").transition().delay(1000).duration(1000).style("margin-top","10px");
+    
+    //observer.observe(document.querySelector('#boxplot_caracts'));
     loadData();
 };

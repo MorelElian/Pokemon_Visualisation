@@ -1,9 +1,13 @@
 const ctx = {
-    w: 1500,
-    h: 1000,
+    w: 1300,
+    h: 600,
+    w_compare : 500,
+    h_compare : 600,
     data_loaded : [],
-    img_width : 300,
-    img_height : 300,
+    img_width : 150,
+    img_height : 150,
+    svg_compare : [],
+    svg_pokemon_2 : [],
     main_caracts : [
         {'title' : 'Name',
          'correspondance' : 'name',
@@ -38,25 +42,29 @@ const ctx = {
         {'title' : 'Experience growth',
          'correspondance' : 'experience_growth',
         'type' : 'progress_bar',
-        'x_upset' : 130,
+        'x_upset' : 140,
         'min' : 600000,
         'max' : 1640000},
         {'title' : 'Base Happiness',
          'correspondance' : 'base_happiness',
         'type' : 'progress_bar',
-        'x_upset' : 115,
+        'x_upset' : 125,
         'min' : 0,
         'max' : 140}
         ],
-    width_progress_bar : 150,
+    width_progress_bar : 100,
     height_progress_bar : 15,
     width_main_caracts : 370,
-    height_against : 400,
+    height_against : 300,
     width_against : 300,
     width_barplot_stats : 200,
     height_barplot_stats : 200,
     i_pokemon : 0,
-    update : 0
+    update : 0,
+    x_upset_barplot_against :85,
+    y_upset_barplot_against : 250,
+    x_upstet_barplot_stats : 125,
+    x_upstet_radar : 125
     
 }
 function sleep(milliseconds) {
@@ -87,8 +95,13 @@ function loadData(){
             const svg = d3.select('svg')
             load_img(data,svg);
             load_main_cacact(svg);
-            create_hexagon_chart(data,svg);
-            create_barplot_against(svg);
+            create_hexagon_chart(data,ctx.svg_compare);
+            create_barplot_against(ctx.svg_compare);
+            load_img(data,ctx.svg_pokemon_2);
+            load_main_cacact(ctx.svg_pokemon_2);
+            ctx.i_pokemon = 300;
+            create_hexagon_chart(data,ctx.svg_compare);
+            create_barplot_against(ctx.svg_compare);
             //create_barplot_base_stats(data,svg);
             
                 }
@@ -190,8 +203,8 @@ function create_barplot_against(svg)
 // append the svg object to the body of the page
     width_barplot = ctx.width_against;
     height_barplot = ctx.height_against;
-    
-    var barplot = svg.append('g').attr("id",'barplot_against').attr('transform','translate('+ (ctx.img_width + ctx.width_main_caracts) + ',0)');
+    //svg = d3.select('#contain-compar-1').append("svg").attr("width",500).attr("height",1000);
+    var barplot = svg.append('g').attr("id",'barplot_against').attr('transform','translate('+ (ctx.x_upset_barplot_against) + ','+ctx.y_upset_barplot_against+')');
     // Parse the Data
 
   // Add X axis
@@ -252,8 +265,8 @@ function create_hexagon_chart(data,svg)
     const margin = { left: 0, top: 30, right: 0, bottom: 30 };
     // Need to handle the view box carefully, to ensure the plot is centered, surrounded by margins
     
-    d3.select('svg').append('g').attr('id','hexagon').style('opacity',0);
-    const hexagon = d3.select('g#hexagon').attr('transform','translate(' + (ctx.img_width + ctx.width_main_caracts + ctx.width_against + 50 ) + ',20)').attr('viewBox',
+    svg.append('g').attr('id','hexagon').style('opacity',0);
+    const hexagon = d3.select('g#hexagon').attr('transform','translate(' + (ctx.x_upstet_radar) + ',20)').attr('viewBox',
     `-${margin.left},
     -${margin.top},
     ${r * 2 + margin.left + margin.right},
@@ -346,13 +359,13 @@ function create_hexagon_chart(data,svg)
 function create_barplot_base_stats()
 {
 
-    svg = d3.select('svg');
+    svg = ctx.svg_compare;
     data = ctx.data_loaded[ctx.i_pokemon];
 
    
     width_barplot = ctx.width_barplot_stats;
     height_barplot = ctx.height_barplot_stats;
-    var barplot = svg.append('g').attr("id",'barplot_base_stats').attr('transform','translate('+ (ctx.width_against + ctx.img_width + ctx.width_main_caracts + 50)  +',20)').style('opacity','0');
+    var barplot = svg.append('g').attr("id",'barplot_base_stats').attr('transform','translate('+ (ctx.x_upstet_barplot_stats)  +',20)').style('opacity','0');
 // Parse the Data
     var data_to_use = [
         {
@@ -443,16 +456,17 @@ function transition_radar_barplot()
     else if(button_change.node().value == "See Radar Chart")
     {
         button_change.attr('value',"See Barplot");
-        d3.select('g#barplot_base_stats').transition().duration(1000).style('opacity',"0").on('end',function(){d3.select('g#braplot_base_stats').remove();create_hexagon_chart(ctx.data_loaded,d3.select('svg')); });
+        d3.select('g#barplot_base_stats').transition().duration(1000).style('opacity',"0").on('end',function(){d3.select('g#braplot_base_stats').remove();create_hexagon_chart(ctx.data_loaded,ctx.svg_compare); });
         
     }
     
 }
 function createViz(){
     console.log("Using D3 v"+d3.version);
-    var svgEl = d3.select("#main").append("svg");
+    var svgEl = d3.select("#contain-pokedex-1").append("svg");
     svgEl.attr("width", ctx.w);
     svgEl.attr("height", ctx.h);
-    
+    ctx.svg_compare = d3.select('#contain-compar-1').append("svg").attr("width",ctx.w_compare).attr("height",ctx.h_compare);
+    ctx.svg_pokemon_2 = d3.select('#contain-pokedex-2').append("svg").attr("width",ctx.w).attr("height",ctx.h);
     loadData(svgEl);
 };

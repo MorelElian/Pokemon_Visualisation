@@ -11,7 +11,7 @@ const ctx = {
     svg_compare : [],
     svg_pokemon_2 : [],
     data_against_first : [],
-    
+    button_value :"radialchart",
     main_caracts : [
         {'title' : 'Name',
          'correspondance' : 'name',
@@ -137,9 +137,16 @@ function updatePokemon()
     d3.select('#gif_pokemon1').remove();
     
     load_img(ctx.data_loaded,ctx.svg_pokemon_1,"1");
+    if(ctx.button_value == "barplot")
+    {
+        update_barplot_base_stats("1");
+    }
+    else
+    {
     add_radial_chart(ctx.svg_compare,"1");
+    }
     load_main_cacact(ctx.svg_pokemon_1,"1")
-    if(ctx.alone = true)
+    if(ctx.alone == true)
     {
         d3.select('#barplot_against').transition().duration(1000).style('opacity',0).on("end",function(){d3.select('#barplot_against').remove();
         create_barplot_against(ctx.svg_compare);});
@@ -159,14 +166,17 @@ function transition_radar_barplot()
     console.log(button_change.node().value);
     if(button_change.node().value == "See Barplot")
     {
+    ctx.button_value = "barplot";
     button_change.attr('value',"See Radar Chart");
     d3.select('g#hexagon').transition().duration(1000).style('opacity',"0").on('end',function(){d3.select('g#hexagon').remove()});
     create_barplot_base_stats();
     }
     else if(button_change.node().value == "See Radar Chart")
     {
+        ctx.button_value = "radar";
         button_change.attr('value',"See Barplot");
-        d3.select('g#barplot_base_stats').transition().duration(1000).style('opacity',"0").on('end',function(){d3.select('g#braplot_base_stats').remove();create_hexagon_chart(ctx.data_loaded,ctx.svg_compare); });
+        d3.select('g#barplot_base_stats').transition().duration(1000).style('opacity',"0").on('end',function(){d3.select('g#braplot_base_stats').remove();create_hexagon_chart(ctx.data_loaded,ctx.svg_compare);
+        add_radial_chart(ctx.svg_pokemon_2,"2"); });
         
     }
     
@@ -194,7 +204,14 @@ function change_pokemon()
     ctx.svg_compare.select('#path_radar2').remove();
     load_img(data,ctx.svg_pokemon_2,"2");
     load_main_cacact(ctx.svg_pokemon_2,"2");
+    if(ctx.button_value == "barplot")
+    {
+        update_barplot_base_stats("2");
+    }
+    else
+    {
     add_radial_chart(ctx.svg_pokemon_2,"2");
+    }
     update_barplot_against("2");
     ctx.group_barplot = 1;
 

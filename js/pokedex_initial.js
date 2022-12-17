@@ -261,7 +261,10 @@ function create_barplot_base_stats()
 
     svg = ctx.svg_compare;
     data = ctx.data_loaded[ctx.i_pokemon];
-
+    if(ctx.alone == false)
+    {
+        data_2 = ctx.data_loaded[ctx.i_pokemon_2];
+    }
    
     width_barplot = ctx.width_barplot_stats;
     height_barplot = ctx.height_barplot_stats;
@@ -293,7 +296,35 @@ function create_barplot_base_stats()
             "value" : data.speed
         }
     ];
-
+    if(ctx.alone == false)
+    {
+    var data_to_use_2 = [
+        {
+            "title" : "hp",
+            "value" : data_2.hp
+        },
+        {
+            "title" : "defense",
+            "value" : data_2.defense
+        },
+        {
+            "title" : "sp_defense",
+            "value" : data_2.sp_defense
+        },
+        {
+            "title" : "sp_attack",
+            "value" : data_2.sp_attack
+        },
+        {
+            "title" : "attack",
+            "value" : data_2.attack
+        },
+        {
+            "title" : "speed",
+            "value" : data_2.speed
+        }
+    ];
+    }
   // Add X axis
   var x = d3.scaleLinear()
     .domain([0, 200])
@@ -318,30 +349,65 @@ function create_barplot_base_stats()
     barplot.transition().duration(500).delay(500).style('opacity','1').on("end",function(){
   //Bars
 
-    barplot.selectAll("myRect")
+    barplot.selectAll("myRecta")
     .data(data_to_use)
     .enter()
     .append("rect")
     .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.title); })
-    .attr("height", y.bandwidth() )
+    .attr('class','rect_base_stats1')
+    .attr("y", function(d) { return y(d.title) + y.bandwidth()/2; })
+    .attr("height", y.bandwidth()/2 )
     .transition()
     .duration(1000)
     .attr("width", function(d) { return x(d.value); })
-    .attr("fill", ctx.palette[data.type1])});
+    .attr("fill", ctx.palette[data.type1]);
 
-    barplot.selectAll("myRect")
+
+    barplot.selectAll("myRecta")
     .data(data_to_use)
     .enter()
     .append("text")
     .text(d => d.value)
+    .attr('class','text_base_stats1')
     .attr("x", d => x(d.value) + 10)
-    .attr("y", function(d) {return y(d.title) +17})
+    .attr("y", function(d) {return y(d.title) + y.bandwidth()/2 +12})
     .style("opacity", 0)
     .transition()
     .delay(1500)
     .duration(300)
     .style("opacity","1");
+
+    if(ctx.alone == false)
+    {
+        
+    barplot.selectAll("myRect22")
+    .data(data_to_use_2)
+    .enter()
+    .append("rect")
+    .attr("class",'rect_base_stats2')
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.title); })
+    .attr("height", y.bandwidth()/2 )
+    .transition()
+    .duration(1000)
+    .attr("width", function(d) { return x(d.value); })
+    .attr("fill", ctx.palette[data_2.type1]);
+
+    barplot.selectAll("myRect22")
+    .data(data_to_use_2)
+    .enter()
+    .append("text")
+    .text(d => d.value)
+    .attr("class","text_base_stats2")
+    .attr("x", d => x(d.value) + 10)
+    .attr("y", function(d) {return y(d.title) +12})
+    .style("opacity", 0)
+    .transition()
+    .delay(1000)
+    .duration(300)
+    .style("opacity","1");
+}
+    });   
 
     //barplot.transition().delay(700).duration(500).style('opacity','1');
 }

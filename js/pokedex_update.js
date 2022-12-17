@@ -86,7 +86,7 @@ function update_barplot_against(poke)
         .domain([0, 4.0])
         .range([ 0, ctx.width_against]);
         var y = d3.scaleBand()
-            .range([ 0, 1.5 * height_barplot])
+            .range([ 0, 1.5 * ctx.height_against])
             .domain(ctx.data_against_first.map(function(d) { return d.title; }))
             .padding(.1);
 
@@ -166,4 +166,145 @@ function add_radial_chart(svg,n_poke)
         ].map((v, i) => [Math.PI * 2 * i / 6 /* radian */, yScale(v) /* distance from the origin */])
     ));
 
+}
+function update_barplot_base_stats(i_pokemon)
+{
+    svg = ctx.svg_compare;
+    data = ctx.data_loaded[ctx.i_pokemon];
+    if(ctx.alone == false)
+    {
+        data_2 = ctx.data_loaded[ctx.i_pokemon_2];
+    }
+   
+    width_barplot = ctx.width_barplot_stats;
+    height_barplot = ctx.height_barplot_stats;
+    var barplot = d3.select('#barplot_base_stats');
+// Parse the Data
+    var data_to_use = [
+        {
+            "title" : "hp",
+            "value" : data.hp
+        },
+        {
+            "title" : "defense",
+            "value" : data.defense
+        },
+        {
+            "title" : "sp_defense",
+            "value" : data.sp_defense
+        },
+        {
+            "title" : "sp_attack",
+            "value" : data.sp_attack
+        },
+        {
+            "title" : "attack",
+            "value" : data.attack
+        },
+        {
+            "title" : "speed",
+            "value" : data.speed
+        }
+    ];
+    if(ctx.alone == false)
+    {
+    var data_to_use_2 = [
+        {
+            "title" : "hp",
+            "value" : data_2.hp
+        },
+        {
+            "title" : "defense",
+            "value" : data_2.defense
+        },
+        {
+            "title" : "sp_defense",
+            "value" : data_2.sp_defense
+        },
+        {
+            "title" : "sp_attack",
+            "value" : data_2.sp_attack
+        },
+        {
+            "title" : "attack",
+            "value" : data_2.attack
+        },
+        {
+            "title" : "speed",
+            "value" : data_2.speed
+        }
+    ];
+    }
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 200])
+    .range([ 0, width_barplot]);
+  // Y axis
+  var y = d3.scaleBand()
+    .range([ 0, height_barplot ])
+    .domain(["hp","speed","defense","sp_defense","sp_attack","attack"])
+    .padding(.1);
+    if(i_pokemon == "1")
+    {
+
+        barplot.selectAll('.rect_base_stats1').remove();
+        barplot.selectAll("myRecta")
+        .data(data_to_use)
+        .enter()
+        .append("rect")
+        .attr("x", x(0) )
+        .attr('class','rect_base_stats1')
+        .attr("y", function(d) { return y(d.title) + y.bandwidth()/2; })
+        .attr("height", y.bandwidth()/2 )
+        .transition()
+        .duration(1000)
+        .attr("width", function(d) { return x(d.value); })
+        .attr("fill", ctx.palette[data.type1]);
+
+        barplot.selectAll('.text_base_stats1').remove();
+        barplot.selectAll("myRecta")
+        .data(data_to_use)
+        .enter()
+        .append("text")
+        .text(d => d.value)
+        .attr('class','text_base_stats1')
+        .attr("x", d => x(d.value) + 10)
+        .attr("y", function(d) {return y(d.title) + y.bandwidth()/2 +12})
+        .style("opacity", 0)
+        .transition()
+        .delay(1500)
+        .duration(300)
+        .style("opacity","1");
+    }
+    else
+    {
+        barplot.selectAll('.rect_base_stats2').remove();
+        barplot.selectAll("myRect22")
+        .data(data_to_use_2)
+        .enter()
+        .append("rect")
+        .attr("x", x(0) )
+        .attr('class','rectbase_stats2')
+        .attr("y", function(d) { return y(d.title); })
+        .attr("height", y.bandwidth()/2 )
+        .transition()
+        .duration(1000)
+        .attr("width", function(d) { return x(d.value); })
+        .attr("fill", ctx.palette[data_2.type1]);
+    
+        barplot.selectAll('.text_base_stats2').remove();
+        barplot.selectAll("myRect22")
+        .data(data_to_use_2)
+        .enter()
+        .append("text")
+        .attr('class','text_base_stats2')
+        .text(d => d.value)
+        .attr("x", d => x(d.value) + 10)
+        .attr("y", function(d) {return y(d.title) +12})
+        .style("opacity", 0)
+        .transition()
+        .delay(1500)
+        .duration(300)
+        .style("opacity","1");
+    }
 }

@@ -5,7 +5,8 @@ To visualize this dataset, we mainly uses d3.js
 This website need a local server to work correctly, else it cannot load the different scripts.
 This project uses d3 and Bootstrap : in order to be run proprely you need to be connected to internet else the visualisation will be damaged
 ## Pokemons' Sprites
-The Pokedex is better with images of the Pokemons. Unfortunately, the files are to huge to fit on GitHub
+The Pokedex is better with images of the Pokemons. Unfortunately, the files are to huge to fit on GitHub or on Moodle. 
+So for now only 30 Pokemons are available to display : you can search for every Pokemon but you will get a sprite only for those who are listed in the section Pokemons
 I have maid a we transfer link with all the Pokemons' sprite : if you want to have them, download the folder unzip it and places it into a folder img.
 The structure should be the following : 
 |src  
@@ -27,20 +28,24 @@ The structure should be the following :
  Here is a list of Pokemons that works well : 
  Palkia  
  Dialga  
- Giratina  
  Abra  
- Ampibom  
- Budew  
- Bidoof  
- Boldore  
- Lapras  
- Natu  
- Pikachu  
  Bulbasaur  
- Ivysaur  
- Rhydon  
- Snover  
- Venusaur  
- Zoroark  
-  
+ Aipom  
+ Alakazam  
+ Arcanine  
+ Bronzong  
+ Charmander  
+ Charmeleon  
+ Chimchar  
+ Cobalion  
+ Doduo  
+ Machoke  
+ Pichu  
+ Pikachu  
+ Tauros  
+ Wigglytuff  
+ Wobbuffet  
+ Wooper  
+ Zebstrika  
+   
 This project is available on github at : https://github.com/MorelElian/Pokemon_Visualisation.git

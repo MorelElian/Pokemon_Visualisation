@@ -423,7 +423,7 @@ var svg = d3.select("#heatmap_gen_types")
 // Build color scale
 var myColor = d3.scaleLinear()
   .range(["white", "#416e63"])
-  .domain([0,d3.max(data,d => d[2].length)])
+  .domain([0,d3.max(data,d => d[2].length) ])
 
 //Read the data
 

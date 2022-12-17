@@ -9,15 +9,15 @@ The Pokedex is better with images of the Pokemons. Unfortunately, the files are 
 I have maid a we transfer link with all the Pokemons' sprite : if you want to have them, download the folder unzip it and places it into a folder img.
 The structure should be the following : 
 |src  
- |data  
-  |pokemons.csv  
- |img  
-  |gifs  
-    // PLACE HERE ALL THE GIFS  
- |js   
-  |all the js_files  
- | HTML FILES  
- |Readme.md  
+||data  
+|||pokemons.csv  
+||img  
+|||gifs  
+||||// PLACE HERE ALL THE GIFS  
+||js   
+|||all the js_files  
+|| HTML FILES  
+||Readme.md  
 
  ## Disclaimer 
  The website is not fully responsive yet, so if you want to have godd vizualisations, you need to run it on a computer.
